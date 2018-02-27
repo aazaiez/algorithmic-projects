@@ -11,7 +11,7 @@ class DynamicArray
 
   # O(1)
   def [](index)
-    raise "index out of bounds" if @length == 0
+    raise "index out of bounds" if @length <= index
     @store[index]
   end
 
@@ -22,25 +22,41 @@ class DynamicArray
 
   # O(1)
   def pop
+    raise 'index out of bounds' if @length == 0
+    @length -= 1
+
   end
 
   # O(1) ammortized; O(n) worst case. Variable because of the possible
   # resize.
   def push(val)
-    for i in 0...length do
-      if !self[i]
-        self[i] = val
-        break
-      end
-    end
+    @length += 1
+    resize! if @length == capacity
+    self[length-1] = val
   end
 
   # O(n): has to shift over all the elements.
   def shift
+    raise 'index out of bounds' if @length == 0
+    first_element = self.first
+    temp_array = StaticArray.new(@capacity)
+    @store.each_index do |idx|
+      temp_array[idx] = @store[idx+1]
+      break if idx == @length - 1
+    end
+    @store = temp_array
+    @length -= 1
+    first_element
   end
 
   # O(n): has to shift over all the elements.
   def unshift(val)
+    @length += 1
+    temp_array = StaticArray.new(@capacity)
+    temp_array[0] = val
+    @store.each_index  do |idx|
+    end
+
   end
 
   protected
