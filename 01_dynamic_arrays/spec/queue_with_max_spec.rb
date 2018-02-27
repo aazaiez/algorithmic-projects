@@ -1,4 +1,5 @@
 require 'queue_with_max'
+require 'byebug'
 
 describe QueueWithMax do
   it "enqueues" do
